@@ -11,9 +11,8 @@ public interface UsuariosRepository extends CrudRepository<Usuarios, Long> {
 
     @Query(value="SELECT ID, NAME, USERNAME, EMAIL FROM USUARIOS ",nativeQuery=true)
     List<Usuarios> getListUserRegister();
-    @Query(value="SELECT ID, NAME, USERNAME, EMAIL "
-            + "FROM USUARIOS WHERE EMAIL IS NOT NULL",nativeQuery=true)
-    List<Usuarios> getListUsersRegisterByEmail();
+    @Query(value="SELECT * FROM USUARIOS WHERE EMAIL = :email",nativeQuery=true)
+    Usuarios getUserRegisterByEmail(String email);
     @Query(value="DELETE FROM USUARIOS WHERE ID = :id ",nativeQuery=true)
     boolean rmById(Long id);
 

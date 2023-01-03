@@ -2,6 +2,7 @@ package cl.espacio.ws.api.controller;
 
 import cl.espacio.ws.api.repository.entity.Usuarios;
 import cl.espacio.ws.api.service.UsuariosService;
+import cl.espacio.ws.api.util.ResponseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import cl.espacio.ws.api.domain.Response;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Map;
 
 @RestController
 @RequestMapping("usuario")
@@ -58,6 +58,33 @@ public class UsuariosController {
             log.error("problemas al obtener usuarios, message: {}", e.getMensaje());
             return new ResponseEntity<>(e, HttpStatus.CONFLICT);
         }
+    }
+
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/email/{email}")
+    public ResponseEntity<Object> searchUsuarioByEmail(@PathVariable String email) {
+        log.debug("Entrando endpoint buscar usuario by email ");
+        try {
+            Usuarios usuario = service.getUsuarioByEmail(email);
+            return new ResponseEntity<>(usuario, HttpStatus.OK);
+        } catch (ResponseException e) {
+            log.error("problemas al encontrar usuario, message: {}", e.getMensaje(), e);
+            Response response = new Response(e.getMensaje());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteUsuario(@PathVariable Long id) {
+        log.debug("Entrando endpoint eliminar usuarios ");
+        boolean result = service.deleteById(id);
+        Response response = new Response();
+        if (!result) {
+            response.setMensaje(ResponseUtils.MSG_NOT_DELETE);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        log.info("Usuario ID {} fue eliminado", id);
+        response.setMensaje(ResponseUtils.MSG_OK_DELETE);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 

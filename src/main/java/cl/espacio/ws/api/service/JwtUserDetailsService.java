@@ -44,7 +44,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 		} else {
 			String passwdBcrypt = bcrypt.hash(user.getPassword());
-			user.setLastLogin(new Date());
+			user.setLastLogin(LocalDateTime.now());
 			usuarioRepository.findById(user.getID());
 			credential = new User(user.getUsername(), passwdBcrypt, new ArrayList<>());
 		}
@@ -56,7 +56,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 		Usuarios user = findByUsername(paramUser, paramPasswd);
 
-		if (user == null) {
+		if (user != null) {
 
 			if (secret.equals(paramUser)) {
 				credential =  new User(paramUser, paramPasswd, new ArrayList<>());
@@ -65,7 +65,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 			}
 		} else {
 			String passwdBcrypt = bcrypt.hash(user.getPassword());
-			user.setLastLogin(new Date());
+			user.setLastLogin(LocalDateTime.now());
 			credential = new User(user.getUsername(), passwdBcrypt, new ArrayList<>());
 		}
 

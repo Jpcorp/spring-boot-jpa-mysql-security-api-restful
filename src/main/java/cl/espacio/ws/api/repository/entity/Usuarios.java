@@ -1,32 +1,22 @@
 package cl.espacio.ws.api.repository.entity;
 
-import static java.util.stream.Collectors.toList;
-
-import java.time.LocalDateTime;
-import java.util.*;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
-
 import cl.espacio.ws.api.validator.Correo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import static java.util.stream.Collectors.toList;
 
 @Entity
 @Table(name = "usuarios")
@@ -52,13 +42,13 @@ public class Usuarios implements UserDetails {
     private String username;
 
     @CreationTimestamp
-    private Date created;
+    private LocalDateTime created;
 
     @UpdateTimestamp
-    private Date modified;
+    private LocalDateTime modified;
 
     @CreationTimestamp
-    private Date lastLogin;
+    private LocalDateTime lastLogin;
 
     @Column(nullable = true)
     private boolean isActive;
@@ -132,19 +122,19 @@ public class Usuarios implements UserDetails {
         this.password = password;
     }
 
-    public Date getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public Date getModified() {
+    public LocalDateTime getModified() {
         return modified;
     }
 
-    public Date getLastLogin() {
+    public LocalDateTime getLastLogin() {
         return lastLogin;
     }
 
-    public void setLastLogin(Date lastLogin) {
+    public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
     }
 

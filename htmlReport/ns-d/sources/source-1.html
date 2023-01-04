@@ -1,0 +1,99 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > UsuariosRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.espacio.ws.api.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: UsuariosRepository (cl.espacio.ws.api.repository)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">UsuariosRepository$MockitoMock$87795640</td>
+  </tr>
+  <tr>
+    <td class="name">UsuariosRepository$MockitoMock$87795640$auxiliary$nvi9KAQI</td>
+  </tr>
+  <tr>
+    <td class="name">UsuariosRepository$MockitoMock$87795640$auxiliary$XpljAUbb</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.espacio.ws.api.repository;
+&nbsp;
+&nbsp;import cl.espacio.ws.api.repository.entity.Usuarios;
+&nbsp;import org.springframework.data.jpa.repository.Query;
+&nbsp;import org.springframework.data.repository.CrudRepository;
+&nbsp;import org.springframework.stereotype.Repository;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;@Repository
+&nbsp;public interface UsuariosRepository extends CrudRepository&lt;Usuarios, Long&gt; {
+&nbsp;
+&nbsp;    @Query(value=&quot;SELECT ID, NAME, USERNAME, EMAIL FROM USUARIOS &quot;,nativeQuery=true)
+&nbsp;    List&lt;Usuarios&gt; getListUserRegister();
+&nbsp;    @Query(value=&quot;SELECT * FROM USUARIOS WHERE EMAIL = :email&quot;,nativeQuery=true)
+&nbsp;    Usuarios getUserRegisterByEmail(String email);
+&nbsp;    @Query(value=&quot;DELETE FROM USUARIOS WHERE ID = :id &quot;,nativeQuery=true)
+&nbsp;    boolean rmById(Long id);
+&nbsp;
+&nbsp;    @Query(value=&quot;SELECT ID, CREATED, EMAIL, IS_ACTIVE, MODIFIED, NAME, LAST_LOGIN TOKEN, USERNAME, PASSWORD &quot;
+&nbsp;            + &quot;FROM USUARIOS  WHERE USERNAME = :username&quot;,nativeQuery=true)
+&nbsp;    Usuarios findByUsername(String username);
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-01-04 11:03</div>
+</div>
+</body>
+</html>

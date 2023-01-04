@@ -1,0 +1,177 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > JwtTokenUtil</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.espacio.ws.api.security.jwt</a>
+</div>
+
+<h1>Coverage Summary for Class: JwtTokenUtil (cl.espacio.ws.api.security.jwt)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">JwtTokenUtil</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11,1%
+  </span>
+  <span class="absValue">
+    (1/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    6,7%
+  </span>
+  <span class="absValue">
+    (1/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.espacio.ws.api.security.jwt;
+&nbsp;
+&nbsp;import io.jsonwebtoken.Claims;
+&nbsp;import io.jsonwebtoken.Jwts;
+&nbsp;import io.jsonwebtoken.SignatureAlgorithm;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.security.core.userdetails.UserDetails;
+&nbsp;import org.springframework.stereotype.Component;
+&nbsp;
+&nbsp;import java.io.Serializable;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.function.Function;
+&nbsp;
+&nbsp;@Component
+<b class="fc">&nbsp;public class JwtTokenUtil implements Serializable {</b>
+&nbsp;
+&nbsp;	private static final long serialVersionUID = -2550185165626007488L;
+&nbsp;
+&nbsp;	public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+&nbsp;
+&nbsp;	@Value(&quot;${jwt.secret}&quot;)
+&nbsp;	private String secret;
+&nbsp;
+&nbsp;	//retrieve username from jwt token
+&nbsp;	public String getUsernameFromToken(String token) {
+<b class="nc">&nbsp;		return getClaimFromToken(token, Claims::getSubject);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	//retrieve expiration date from jwt token
+&nbsp;	public Date getExpirationDateFromToken(String token) {
+<b class="nc">&nbsp;		return getClaimFromToken(token, Claims::getExpiration);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	public &lt;T&gt; T getClaimFromToken(String token, Function&lt;Claims, T&gt; claimsResolver) {
+<b class="nc">&nbsp;		final Claims claims = getAllClaimsFromToken(token);</b>
+<b class="nc">&nbsp;		return claimsResolver.apply(claims);</b>
+&nbsp;	}
+&nbsp;    //for retrieveing any information from token we will need the secret key
+&nbsp;	private Claims getAllClaimsFromToken(String token) {
+<b class="nc">&nbsp;		return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	//check if the token has expired
+&nbsp;	private Boolean isTokenExpired(String token) {
+<b class="nc">&nbsp;		final Date expiration = getExpirationDateFromToken(token);</b>
+<b class="nc">&nbsp;		return expiration.before(new Date());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	//generate token for user
+&nbsp;	public String generateToken(UserDetails userDetails) {
+<b class="nc">&nbsp;		Map&lt;String, Object&gt; claims = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;		return doGenerateToken(claims, userDetails.getUsername());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	//while creating the token -
+&nbsp;	//1. Define  claims of the token, like Issuer, Expiration, Subject, and the ID
+&nbsp;	//2. Sign the JWT using the HS512 algorithm and secret key.
+&nbsp;	//3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
+&nbsp;	//   compaction of the JWT to a URL-safe string 
+&nbsp;	private String doGenerateToken(Map&lt;String, Object&gt; claims, String subject) {
+&nbsp;
+<b class="nc">&nbsp;		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))</b>
+<b class="nc">&nbsp;				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))</b>
+<b class="nc">&nbsp;				.signWith(SignatureAlgorithm.HS512, secret).compact();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	//validate token
+&nbsp;	public Boolean validateToken(String token, UserDetails userDetails) {
+<b class="nc">&nbsp;		final String username = getUsernameFromToken(token);</b>
+<b class="nc">&nbsp;		return (username.equals(userDetails.getUsername()) &amp;&amp; !isTokenExpired(token));</b>
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-01-04 11:03</div>
+</div>
+</body>
+</html>

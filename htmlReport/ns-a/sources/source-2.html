@@ -1,0 +1,167 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > JwtRequestFilter</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.espacio.ws.api.security.jwt</a>
+</div>
+
+<h1>Coverage Summary for Class: JwtRequestFilter (cl.espacio.ws.api.security.jwt)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">JwtRequestFilter</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (16/16)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.espacio.ws.api.security.jwt;
+&nbsp;
+&nbsp;import cl.espacio.ws.api.service.JwtUserDetailsService;
+&nbsp;import io.jsonwebtoken.ExpiredJwtException;
+&nbsp;import io.jsonwebtoken.MalformedJwtException;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+&nbsp;import org.springframework.security.core.context.SecurityContextHolder;
+&nbsp;import org.springframework.security.core.userdetails.UserDetails;
+&nbsp;import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+&nbsp;import org.springframework.stereotype.Component;
+&nbsp;import org.springframework.web.filter.OncePerRequestFilter;
+&nbsp;
+&nbsp;import javax.servlet.FilterChain;
+&nbsp;import javax.servlet.ServletException;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import java.io.IOException;
+&nbsp;
+&nbsp;@Component
+<b class="fc">&nbsp;public class JwtRequestFilter extends OncePerRequestFilter {</b>
+&nbsp;	
+<b class="fc">&nbsp;	Logger log = LoggerFactory.getLogger(this.getClass());</b>
+&nbsp;	@Autowired
+&nbsp;	private JwtUserDetailsService jwtUserDetailsService;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private JwtTokenUtil jwtTokenUtil;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+&nbsp;			throws ServletException, IOException {
+&nbsp;
+<b class="fc">&nbsp;		final String requestTokenHeader = request.getHeader(&quot;Authorization&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;		final String requestUser = request.getHeader(&quot;username&quot;);</b>
+<b class="fc">&nbsp;		final String requestPasswd = request.getHeader(&quot;password&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;		String username = null;</b>
+<b class="fc">&nbsp;		String jwtToken = null;</b>
+&nbsp;
+&nbsp;		//Once we get the token validate it.
+<b class="fc">&nbsp;		if (requestUser != null &amp;&amp; SecurityContextHolder.getContext().getAuthentication() == null) {</b>
+&nbsp;
+<b class="fc">&nbsp;			UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(requestUser, requestPasswd);</b>
+&nbsp;
+&nbsp;			// if token is valid configure Spring Security to manually set authentication
+<b class="fc">&nbsp;			if (userDetails != null) {</b>
+&nbsp;
+<b class="fc">&nbsp;				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(</b>
+<b class="fc">&nbsp;						userDetails, null, userDetails.getAuthorities());</b>
+<b class="fc">&nbsp;				usernamePasswordAuthenticationToken</b>
+<b class="fc">&nbsp;						.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));</b>
+&nbsp;				// After setting the Authentication in the context, we specify
+&nbsp;				// that the current user is authenticated. So it passes the Spring Security Configurations successfully.
+<b class="fc">&nbsp;				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);</b>
+&nbsp;			}
+&nbsp;		}
+<b class="fc">&nbsp;		chain.doFilter(request, response);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-01-04 11:03</div>
+</div>
+</body>
+</html>

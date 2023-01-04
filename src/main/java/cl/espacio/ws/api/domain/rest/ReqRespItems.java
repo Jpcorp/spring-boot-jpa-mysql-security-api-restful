@@ -19,7 +19,11 @@ public class ReqRespItems {
     public void setDescription(String value) { this.description = value; }
 
     @JsonProperty("result")
-    public Result getResult() { return result; }
+    public Result getResult() {
+        if (this.result == null) {
+            return new Result();
+        }
+        return result; }
     @JsonProperty("result")
     public void setResult(Result value) { this.result = value; }
 }

@@ -2,11 +2,8 @@ package cl.espacio.ws.api.service;
 
 import cl.espacio.ws.api.repository.UsuariosRepository;
 import cl.espacio.ws.api.repository.entity.Usuarios;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,9 +13,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,7 +29,7 @@ public class UsuariosServiceTest {
 
     private Usuarios usuario;
 
-    private ArrayList<Usuarios> usuarios;
+    private ArrayList<Usuarios> usuarios = new ArrayList<>();
 
     @BeforeEach
     void createdData() {
@@ -49,19 +46,19 @@ public class UsuariosServiceTest {
     }
 
     @Test
-    void testGetListUsersRegisterByEmail() {
+    void testGetUsersRegisterByEmail() {
         List<Usuarios> expectedUsers = Arrays.asList(
                 new Usuarios(1L, "jose andres",
                         "jo.an", "jo.an@m.cl"),
                 new Usuarios(1L, "Juan Pablo",
                         "j.pablo", "j.apblo@live.cl")
         );
-        given(usuariosRepository.getListUsersRegisterByEmail())
-                .willReturn(expectedUsers);
-        // Act
-        List<Usuarios> actualUsers = usuariosRepository.getListUsersRegisterByEmail();
+        given(usuariosRepository.getUserRegisterByEmail(usuario.getEmail()))
+                .willReturn(expectedUsers.get(0));
+        usuariosRepository.save(expectedUsers.get(0));// Act
+        Usuarios actualUsers = usuariosRepository.getUserRegisterByEmail(expectedUsers.get(0).getEmail());
         // Assert
-        assertEquals(expectedUsers, actualUsers);
+        assertEquals(expectedUsers.get(0), actualUsers);
     }
 
     @Test

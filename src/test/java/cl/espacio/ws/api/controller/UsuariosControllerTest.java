@@ -3,7 +3,7 @@ package cl.espacio.ws.api.controller;
 import cl.espacio.ws.api.exceptions.ResponseException;
 import cl.espacio.ws.api.repository.entity.Usuarios;
 import cl.espacio.ws.api.service.UsuariosService;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -11,17 +11,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.http.RequestEntity.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+//@WebMvcTest(UsuariosController.class)
 public class UsuariosControllerTest {
 
     @Autowired
@@ -35,9 +38,9 @@ public class UsuariosControllerTest {
 
     private Usuarios usuario;
 
-    private ArrayList<Usuarios> usuarios;
+    private ArrayList<Usuarios> usuarios = new ArrayList<>();
 
-    @BeforeAll
+    @BeforeEach
     void createdData() {
         Usuarios users1 = new Usuarios(1L, "jose andres",
                 "jo.an", "jo.an@m.cl");
@@ -49,6 +52,45 @@ public class UsuariosControllerTest {
         usuarios.add(users2);
 
     }
+
+    @Test
+    void testCreateUsuario() {
+        try {
+            given(service.createdUser(any())).willReturn(usuario);
+
+            String Json = "{\n" +
+                    "   \"name\":\"Juan Rodriguez\",\n" +
+                    "   \"email\":\"juan12@rodriguez.cl\",\n" +
+                    "   \"password\":\"Hunter23\",\n" +
+                    "   \"phone\":\"+57983790533\"\n" +
+                    "}";
+
+            MockHttpServletRequestBuilder servletRequest =
+                    UsuariosControllerTest.myFactoryRequest("/")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(Json);
+
+            MvcResult result = mockMvc.perform(servletRequest)
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            String actual = result.getResponse().getContentAsString();
+
+            assertEquals(200, result.getResponse().getStatus());
+        } catch (ResponseException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static MockHttpServletRequestBuilder myFactoryRequest(String url) {
+        return MockMvcRequestBuilders.get(url)
+                .header("username", "admin")
+                .header("password", "admin");
+    }
+
+
 /**
     @Test
     void testCreateUsuario() throws Exception {

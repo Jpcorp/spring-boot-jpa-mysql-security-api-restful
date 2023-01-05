@@ -14,6 +14,9 @@ _El proyecto contiene los siguientes directorios_
 - security    : archivos para securizar un API Rest esta implementación con JWT para la generación de token
 - service     : archivos que implemetan la logica de la aplicación
 - validator   : archivos que implemetan validaciones
+
+### Otros directorios 
+- htmlReport : Directorio para ver el reporte del cobertura de los fuentes
  
 ### Pre-requisitos 📋 
 

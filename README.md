@@ -17,6 +17,7 @@ _El proyecto contiene los siguientes directorios_
 
 ### Otros directorios 
 - htmlReport : Directorio para ver el reporte del cobertura de los fuentes
+- assets     : Directorio contiene arhivos postman y script de tablas
 
 ### Gestion de documental
 - La documentacion del proyecto y gestion de las tareas se utilizo la herramienta flying Donuts con una dashboard kamban 

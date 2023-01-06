@@ -17,6 +17,11 @@ _El proyecto contiene los siguientes directorios_
 
 ### Otros directorios 
 - htmlReport : Directorio para ver el reporte del cobertura de los fuentes
+
+### Gestion de documental
+- La documentacion del proyecto y gestion de las tareas se utilizo la herramienta flying Donuts con una dashboard kamban 
+  - Para visualizacion de las tareas https://www.flyingdonut.io/ 
+  - las credenciales se enviaran por correo para la visualización
  
 ### Pre-requisitos 📋 
 
